@@ -70,6 +70,10 @@ body {
 	border-radius: 5px;
 }
 
+.question .material-icons {
+	font-size: 16px;
+}
+
 .question:after {
 	content: "";
 	position: absolute;

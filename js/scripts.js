@@ -6,14 +6,31 @@ $(document).ready(function() {
 	var followScroll = true;
 
 	$(".toc-entry").click(function() {
-		var index = this.id.match(/toc-entry-(.*)/);
+		// var index = this.id.match(/toc-entry-(.*)/);
 
-		if (index) {
-			$('html, body').animate({
-				scrollTop: $("#entry-" + index[1]).offset().top - 20
-			}, 500);
+		// if (index) {
+		// 	$('html, body').animate({
+		// 		scrollTop: $("#entry-" + index[1]).offset().top - 20
+		// 	}, 500);
+		// } else if (this.id == "top") {
+		// 	$('html, body').animate({
+		// 		scrollTop: $("html").offset().top
+		// 	}, 500);
+		// }
+
+		// $(".toc-entry.selected").removeClass("selected");
+		// $(this).addClass("selected");
+
+		var questionId = $(this).data("id");
+
+		if (questionId) {
+			$("html, body").animate({
+				scrollTop: $("#" + questionId).offset().top - 20
+			}, 500, function() {
+				window.location.hash = questionId;
+			});
 		} else if (this.id == "top") {
-			$('html, body').animate({
+			$("html, body").animate({
 				scrollTop: $("html").offset().top
 			}, 500);
 		}
@@ -25,9 +42,9 @@ $(document).ready(function() {
 	$(document).scroll(function() {
 		if (followScroll) {
 			for (var i = 0; i < faq.length; i++) {
-				if ($(this).scrollTop() >= $("#entry-" + i).position().top + $("#entry-" + i - 1 + " .question").height() - 70) {
+				if ($(this).scrollTop() >= $(".entry-" + i).position().top + $(".entry-" + i - 1 + " .question").height() - 70) {
 					$(".toc-entry.selected").removeClass("selected");
-					$("#toc-entry-" + i).addClass("selected");
+					$(".toc-entry-" + i).addClass("selected");
 				}
 			}
 		}
@@ -50,7 +67,7 @@ $(document).ready(function() {
 });
 
 var generateEntry = function(entry, index) {
-	$(".faq").append("<div class='entry clearfix' id='entry-" + index + "'>\
+	$(".faq").append("<div class='entry entry-" + index + " clearfix' id='" + entry.id + "'>\
 		<div class='question-container'>\
 			<div class='question'>" + entry.question + "</div>\
 		</div>\
@@ -60,6 +77,6 @@ var generateEntry = function(entry, index) {
 	</div>");
 
 	if (entry.question.indexOf("learn more") < 0) {
-		$(".table-of-contents .questions").append("<div class='toc-entry' id='toc-entry-" + index + "'>" + entry.question + "</div>");
+		$(".table-of-contents .questions").append("<div class='toc-entry toc-entry-" + index + "' data-id='" + entry.id + "'>" + entry.question + "</div>");
 	}
 }
